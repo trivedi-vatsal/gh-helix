@@ -13,5 +13,7 @@ export async function cloneMirror(
   destPath: string,
   token?: string,
 ): Promise<void> {
-  await runGit(['clone', '--no-single-branch', cloneUrl, destPath], { env: buildGitAuthEnv(token) });
+  await runGit(['clone', '--no-single-branch', cloneUrl, destPath], {
+    env: buildGitAuthEnv(token),
+  });
 }

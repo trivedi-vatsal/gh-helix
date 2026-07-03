@@ -141,7 +141,10 @@ async function processRepo(repo: RemoteRepo, ctx: ProcessContext): Promise<RepoM
       await retry(() => cloneMirror(cloneUrl, localPath, ctx.token), { retries: ctx.retries });
       logger.success(`Cloned ${repo.name}`);
     } else {
-      await retry(() => updateMirror(localPath, cloneUrl, repo.defaultBranch ?? 'main', ctx.token), { retries: ctx.retries });
+      await retry(
+        () => updateMirror(localPath, cloneUrl, repo.defaultBranch ?? 'main', ctx.token),
+        { retries: ctx.retries },
+      );
       logger.success(`Updated ${repo.name}`);
     }
 

@@ -33,9 +33,7 @@ export async function findOrphanDirs(
   const localDirs = await listSubdirectories(backupDirectory);
   const expected = new Set(Array.from(knownNames, (name) => mirrorDirName(name)));
 
-  const candidates = localDirs.filter(
-    (dir) => !RESERVED_DIR_NAMES.has(dir) && !expected.has(dir),
-  );
+  const candidates = localDirs.filter((dir) => !RESERVED_DIR_NAMES.has(dir) && !expected.has(dir));
   const isRepo = await Promise.all(
     candidates.map((dir) => isRepoDirectory(path.join(backupDirectory, dir))),
   );
