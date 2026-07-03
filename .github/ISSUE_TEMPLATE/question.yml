@@ -1,0 +1,31 @@
+name: Question
+description: Ask about usage, configuration, or behavior
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For general "how do I..." questions, check [docs/faq.md](../../docs/faq.md) and
+        [docs/getting-started.md](../../docs/getting-started.md) first — many common questions are
+        already answered there. If your repository has GitHub Discussions enabled, consider asking
+        there instead, so answers are more discoverable.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: What are you trying to accomplish?
+      description: Context helps us give a more useful answer than the literal question alone.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I checked [docs/faq.md](../../docs/faq.md) and [docs/README.md](../../docs/README.md)'s document map

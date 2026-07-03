@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussion
+    url: https://github.com/trivedi-vatsal/gh-helix/discussions
+    about: For open-ended discussion, ideas, or asking the community (if Discussions is enabled on this repository).
+  - name: Security vulnerability
+    url: https://github.com/trivedi-vatsal/gh-helix/security/advisories/new
+    about: Please do not open a public issue for a security vulnerability — see SECURITY.md.

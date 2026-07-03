@@ -1,0 +1,9 @@
+{
+  "GITHUB_ORG": "my-org",
+  "BACKUP_DIRECTORY": "D:/GitHubBackupsTest",
+  "MAX_PARALLEL": 5,
+  "FETCH_LFS": true,
+  "AUTH_MODE": "auto",
+  "GH_HOST": "",
+  "GITHUB_API_URL": ""
+}
