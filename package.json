@@ -27,7 +27,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@octokit/rest": "^21.0.2",
+    "@octokit/rest": "^22.0.1",
     "commander": "^12.1.0",
     "dotenv": "^16.4.5",
     "execa": "^9.5.1",
