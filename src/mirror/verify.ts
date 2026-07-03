@@ -23,7 +23,7 @@ export async function verifyMirror(mirrorPath: string): Promise<VerifyResult> {
   if (!hasOrigin) errors.push('origin remote is missing');
 
   let fsckPassed = true;
-  let fsckOutput = '';
+  let fsckOutput: string;
   try {
     const result = await runGit(['fsck', '--full'], { cwd: mirrorPath });
     fsckOutput = `${result.stdout}${result.stderr}`.trim();
