@@ -36,16 +36,18 @@ real environment. A `config.json` that exists but fails to parse as JSON *is* an
 
 ## Reference
 
-| Key | Env var | Required | Default | Validation |
-| --- | --- | --- | --- | --- |
-| GitHub organization | `GITHUB_ORG` | **yes** | — | non-empty string |
-| Backup directory | `BACKUP_DIRECTORY` | **yes** | — | non-empty string; resolved to an absolute path |
-| Worker pool size | `MAX_PARALLEL` | no | `5` | positive integer |
-| Fetch Git LFS objects | `FETCH_LFS` | no | `true` | boolean (`true/1/yes/on` or `false/0/no/off`, case-insensitive) |
-| GitHub token (primary) | `GITHUB_TOKEN` | no* | — | non-empty string |
-| GitHub token (fallback) | `GH_TOKEN` | no* | — | non-empty string |
-| Enterprise host | `GH_HOST` | no | — | bare hostname, GHES only |
-| Enterprise API URL | `GITHUB_API_URL` | no | `https://api.github.com` (Octokit's own default) | full REST base URL, GHES only |
+| Key | Env var | Required | Default | Possible values | Validation |
+| --- | --- | --- | --- | --- | --- |
+| GitHub organization | `GITHUB_ORG` | **yes** | — | any non-empty string | non-empty string |
+| Backup directory | `BACKUP_DIRECTORY` | **yes** | — | any path | non-empty string; resolved to an absolute path |
+| Worker pool size | `MAX_PARALLEL` | no | `5` | any positive integer | positive integer |
+| Fetch Git LFS objects | `FETCH_LFS` | no | `true` | `true`/`1`/`yes`/`on`, `false`/`0`/`no`/`off` | boolean (`true/1/yes/on` or `false/0/no/off`, case-insensitive) |
+| Checkout working tree | `CHECKOUT_CODE` | no | `true` | `true`/`1`/`yes`/`on`, `false`/`0`/`no`/`off` | boolean (`true/1/yes/on` or `false/0/no/off`, case-insensitive) |
+| Authentication mode | `AUTH_MODE` | no | `auto` | `auto`, `token`, `gh` | one of `auto`, `token`, `gh`, case-insensitive |
+| GitHub token (primary) | `GITHUB_TOKEN` | no* | — | any non-empty string | non-empty string |
+| GitHub token (fallback) | `GH_TOKEN` | no* | — | any non-empty string | non-empty string |
+| Enterprise host | `GH_HOST` | no | — | any bare hostname | bare hostname, GHES only |
+| Enterprise API URL | `GITHUB_API_URL` | no | `https://api.github.com` (Octokit's own default) | any full REST base URL | full REST base URL, GHES only |
 
 \* At least one token source is required at runtime: `GITHUB_TOKEN`, `GH_TOKEN`, or a working
 `gh auth login` session. This isn't validated at config-load time — it's resolved lazily, per
@@ -93,6 +95,20 @@ Whether `git lfs fetch --all` runs after every clone/update. Default `true`. Whe
 failed LFS fetch marks that repository's backup `status` as `failed` (not a warning) — see
 [Git LFS](lfs.md#why-a-failed-lfs-fetch-is-a-backup-failure). Set to `false` only if you're
 certain no mirrored repository uses LFS, or if LFS storage is backed up through another path.
+
+### `CHECKOUT_CODE`
+
+Whether repositories are stored as browsable working-tree clones (`true`, the default), with
+source files checked out on disk, or as bare mirrors (`false`) — `.git`-only, no working tree,
+full ref/tag/notes fidelity, less disk. Affects the on-disk directory naming convention (see
+`mirrorDirName` in `src/utils/paths.ts`).
+
+### `AUTH_MODE`
+
+Which credential source(s) `resolveToken` is allowed to use: `auto` (default; `GITHUB_TOKEN` then
+`GH_TOKEN` then `gh auth token`), `token` (only `GITHUB_TOKEN`/`GH_TOKEN`, never shells out to
+`gh`), or `gh` (only the `gh auth token` fallback, ignoring any token env vars). See
+[Authentication](authentication.md).
 
 ### `GITHUB_TOKEN` / `GH_TOKEN`
 

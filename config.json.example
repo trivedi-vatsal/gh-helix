@@ -1,6 +1,6 @@
 {
   "GITHUB_ORG": "my-org",
-  "BACKUP_DIRECTORY": "D:/GitHubBackupsTest",
+  "BACKUP_DIRECTORY": "D:/GitHubBackups",
   "MAX_PARALLEL": 5,
   "FETCH_LFS": true,
   "AUTH_MODE": "auto",

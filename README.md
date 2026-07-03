@@ -92,17 +92,17 @@ See [docs/architecture.md](docs/architecture.md) for how these fit together, and
 
 ## Comparison with alternatives
 
-| | gh-helix | Plain `git clone` scripts | [ghorg](https://github.com/gabrie30/ghorg) | GitHub's export/migration API |
-| --- | --- | --- | --- | --- |
-| Browsable source files on disk | ✅ | Depends on script | ❌ (bare mirrors) | N/A (full org export, not Git-native) |
-| Rename/orphan detection | ✅ (ID-keyed) | ❌ | Partial | N/A |
-| LFS treated as a hard failure, not a warning | ✅ | ❌ | ❌ | N/A |
-| Offline restore with LFS pointer verification | ✅ | ❌ | ❌ | ❌ |
-| Crash-safe, resumable operations | ✅ | ❌ | ❌ | N/A |
-| Cross-process locking | ✅ | ❌ | ❌ | N/A |
-| Degraded mode on GitHub outage | ✅ | ❌ | ❌ | N/A |
-| GitHub Enterprise Server support | ✅ | Depends | ✅ | ✅ |
-| Scope | Git data (backup/restore) | Git data | Git data (clone-focused) | Full org (issues, PRs, wiki, settings) |
+| | gh-helix | Plain `git clone` scripts | GitHub's export/migration API |
+| --- | --- | --- | --- |
+| Browsable source files on disk | ✅ | Depends on script | N/A (full org export, not Git-native) |
+| Rename/orphan detection | ✅ (ID-keyed) | ❌ | N/A |
+| LFS treated as a hard failure, not a warning | ✅ | ❌ | N/A |
+| Offline restore with LFS pointer verification | ✅ | ❌ | ❌ |
+| Crash-safe, resumable operations | ✅ | ❌ | N/A |
+| Cross-process locking | ✅ | ❌ | N/A |
+| Degraded mode on GitHub outage | ✅ | ❌ | N/A |
+| GitHub Enterprise Server support | ✅ | Depends | ✅ |
+| Scope | Git data (backup/restore) | Git data | Full org (issues, PRs, wiki, settings) |
 
 gh-helix is narrower in scope than a full org-migration tool by design — see
 [Non-goals](docs/roadmap.md#non-goals) — and deliberately more conservative than a simple clone
@@ -183,16 +183,18 @@ Configuration can come from **`.env`**, **`config.json`**, or the real process e
 a setting is defined in more than one place, the process environment (which includes anything
 loaded from `.env`) always wins over `config.json`.
 
-| Variable | Required | Default | Description |
-| --- | --- | --- | --- |
-| `GITHUB_ORG` | yes | — | GitHub organization login to back up. |
-| `BACKUP_DIRECTORY` | yes | — | Absolute path where mirrors are stored. |
-| `MAX_PARALLEL` | no | `5` | Worker pool size for concurrent Git operations. |
-| `FETCH_LFS` | no | `true` | Run `git lfs fetch --all` after every clone/update. |
-| `GITHUB_TOKEN` | no* | — | GitHub token. See [Authentication](#authentication). |
-| `GH_TOKEN` | no* | — | Fallback token if `GITHUB_TOKEN` is unset. |
-| `GH_HOST` | no | — | Enterprise hostname, used only for the `gh auth token` fallback. |
-| `GITHUB_API_URL` | no | `https://api.github.com` | REST API base URL for GitHub Enterprise Server. |
+| Variable | Required | Default | Possible values | Description |
+| --- | --- | --- | --- | --- |
+| `GITHUB_ORG` | yes | — | any non-empty string | GitHub organization login to back up. |
+| `BACKUP_DIRECTORY` | yes | — | any path (resolved to absolute) | Absolute path where mirrors are stored. |
+| `MAX_PARALLEL` | no | `5` | positive integer | Worker pool size for concurrent Git operations. |
+| `FETCH_LFS` | no | `true` | `true`/`1`/`yes`/`on`, `false`/`0`/`no`/`off` (case-insensitive) | Run `git lfs fetch --all` after every clone/update. |
+| `CHECKOUT_CODE` | no | `true` | `true`/`1`/`yes`/`on`, `false`/`0`/`no`/`off` (case-insensitive) | `true` stores browsable working-tree clones; `false` stores bare mirrors. |
+| `AUTH_MODE` | no | `auto` | `auto`, `token`, `gh` (case-insensitive) | Which credential source(s) to use. See [Authentication](#authentication). |
+| `GITHUB_TOKEN` | no* | — | any non-empty string | GitHub token. See [Authentication](#authentication). |
+| `GH_TOKEN` | no* | — | any non-empty string | Fallback token if `GITHUB_TOKEN` is unset. |
+| `GH_HOST` | no | — | bare hostname (GHES only) | Enterprise hostname, used only for the `gh auth token` fallback. |
+| `GITHUB_API_URL` | no | `https://api.github.com` | full REST base URL (GHES only) | REST API base URL for GitHub Enterprise Server. |
 
 \* At least one token source is required: `GITHUB_TOKEN`, `GH_TOKEN`, or a working `gh auth
 login` session.
