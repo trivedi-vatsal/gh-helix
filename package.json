@@ -30,7 +30,7 @@
     "@octokit/rest": "^21.0.2",
     "commander": "^12.1.0",
     "dotenv": "^16.4.5",
-    "execa": "^9.5.1",
+    "execa": "^10.0.0",
     "ora": "^8.1.0",
     "p-limit": "^6.1.0",
     "picocolors": "^1.1.1",
